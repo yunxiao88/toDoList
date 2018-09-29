@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ToDoList</title>
+		<style>
+			.user-in{
+				height: 30px;
+				line-height: 30px;
+				width: 200px;
+			}
+			.add-btn{
+				background: rgb(49,139,255);
+				color: #fff;
+				box-shadow: none;
+				border: none;
+				height: 30px;
+				line-height: 30px;
+				width: 50px;
+			}
+			.undone-title{
+				background:rgb(255,224,89);
+				height: 30px;
+				line-height: 30px;
+				width: 300px;
+
+			}
+			.done-title{
+				background: #eee;
+				height: 30px;
+				line-height: 30px;
+				width: 300px;
+			}
+			.main>div{
+				margin-bottom: 20px;
+			}
+			.undone-list li,.done-list li{
+				list-style: none;
+			}
+			.undoneTask + label{
+			    background-color: white;
+			    border-radius: 5px;
+			    border:1px solid #d3d3d3;
+			    width:20px;
+			    height:20px;
+			    display: inline-block;
+			    text-align: center;
+			    vertical-align: middle;
+			    line-height: 20px;
+			}
+			.undoneTask:checked + label{
+			    background-color: #eee;
+			}
+			.undoneTask:checked + label:after{
+			    content:"\2714";
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<div>
+				<input type="text" class="user-in" id="toDoInput">
+				<button class="add-btn" id="addBtn">增加</button>
+			</div>
+			<div>
+				<div class="undone-title">
+					未完成
+					<span id="undoneNum"></span>
+				</div>
+				<ul id="undoneList" class="undone-list">
+					
+				</ul>	
+			</div>
+			<div >
+				<div class="done-title">
+					已完成
+				</div>
+				<ul id="doneList" class=".done-list">
+					
+				</ul>
+			</div>
+    <input type="checkbox" id="myCheck">
+    <label for="myCheck"></label>
+
+		</div>
+
+	    <script>
+	    	//存放已完成事项
+	    	var doneArr=[],
+	    	//存放未完成事项
+	    		undoneArr=[];
+	    	var btn = document.getElementById("addBtn");
+		    btn.onclick = function(){
+		        addUndoneData();
+		    };
+	    	function addUndoneData(){
+	    		var undoneItem = document.getElementById("toDoInput").value;
+	    		var undoneList=document.getElementById("undoneList");
+
+	    		if(undoneItem){
+	    			undoneArr.push(undoneItem);
+	    			var liDom = document.createElement("li")
+	    			liDom.innerHTML="<input type='checkbox' name='undoneTask' class='undoneTask'/><label></label>"+undoneItem;
+	    			undoneList.appendChild(liDom);
+	    			// renderUndoneList();
+
+	    			document.getElementById("toDoInput").value ="";
+	    			liDom.onclick=function(liDom){
+	    				var _this = this;
+	    				setTimeout(function(){
+	    					console.log(_this .innerHTML);
+		    				var doneList=document.getElementById("doneList");
+		    				var doneItem = document.createElement("li");
+		    				doneItem.innerHTML = _this .innerHTML;
+		    				doneList.appendChild(doneItem);
+		    				undoneList.removeChild(_this);
+	    				},1500)
+	    				
+	    			}
+	    		}
+	    	}
+	    	function undoneTasksClick(){
+	    		var undoneTasks = document.getElementsByName("undoneTask");
+	    		undoneTasks.onclick = function(){
+		    		var undoneLen = undoneTasks.length;
+		    		for(var i=0;i<undoneLen;i++){
+		    			if(undoneLen[i].checked==true){
+		    				undoneArr.splice(i,1);
+		    				renderUndoneList();
+		    			}
+		    		}
+	    		}
+	    	}
+	    	
+	    	function renderUndoneList(){
+	    		//最刚开始采用的是这种方法，每次添加的时候将整个列表都重绘了一遍，是对资源的浪费
+	    		var undoneList=document.getElementById("undoneList");
+	    		undoneList.appendChild("<>")
+
+	    		var undoneListHtml="";
+	    		var len = undoneArr.length;
+	    		for(var i=0;i<len;i++){
+	    				undoneListHtml+="<li><input type='checkbox' name='undoneTask'/>"+undoneArr[i]+"</li>"
+	    			}
+	    			//最刚开始采用的是这种方法，每次添加的时候将整个列表都重绘了一遍，是对资源的浪费
+	    			var undoneList=document.getElementById("undoneList");
+	    			// undoneList.appendChild(undoneListHtml);
+	    			undoneList.innerHTML = undoneListHtml;
+	    	}
+
+	    </script>
+	</body>
+</html>
